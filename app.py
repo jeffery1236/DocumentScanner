@@ -1,14 +1,14 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, send_file
 from werkzeug.utils import secure_filename
 from scan import scan_image
 import os
 
-UPLOAD_FOLDER = 'uploads'
+# UPLOAD_FOLDER = 'uploads'
 UPLOADED_FILE = 'uploads/uploaded.png'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def allowed_file(filename):
@@ -22,11 +22,11 @@ def index():
         imageFile = request.files['imageFile']
         imageFile.save(UPLOADED_FILE)
         scanned_image = scan_image(UPLOADED_FILE)
-        scanned_image.save('static/scanned_images/scanned_image.png')
+        scanned_image.save('scanned_images/scanned_image.png')
 
-        return render_template('scannedImage.html')
+        return send_file('scanned_images/scanned_image.png')
 
-    return render_template('index.html', scanned=False)
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
